@@ -11,13 +11,16 @@ else:
     PORT = int(PORT)
 
 BUFFERSIZE = 1024
-ADDR = (HOST, PORT)
+ADDRESS = (HOST, PORT)
 
 client_socket = socket(AF_INET, SOCK_STREAM)
-client_socket.connect(ADDR)
+client_socket.connect(ADDRESS)
 
 
 def start_app():
+    """
+    Starts the client chat application
+    """
     receive_thread = Thread(target=recieve)
     receive_thread.start()
     tkinter.mainloop()

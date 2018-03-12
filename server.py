@@ -6,12 +6,12 @@ addresses = {}
 
 HOST = ""
 PORT = 33000
-ADDR = (HOST, PORT)
+ADDRESS = (HOST, PORT)
 
 BUFFERSIZE = 1024
 
 SERVER = socket(AF_INET, SOCK_STREAM)
-SERVER.bind(ADDR)
+SERVER.bind(ADDRESS)
 
 
 def accept_incoming_connections():
@@ -22,7 +22,7 @@ def accept_incoming_connections():
     while True:
 
         client, client_address = SERVER.accept()
-        print(f"{client}:{client_address} has connected.")
+        print(f"{client_address[0]}:{client_address[1]} has connected.")
 
         client.send(bytes("Hello world. Please type your name and press enter.", "utf8"))
         addresses[client] = client_address
@@ -56,7 +56,8 @@ def handle_client(client):
             client.close()
             del clients[client]
 
-            broadcast(bytes(f"{name} has left the chat.", "utf8"))
+            if clients:
+                broadcast(bytes(f"{name} has left the chat.", "utf8"))
 
             break
 
@@ -65,7 +66,6 @@ def broadcast(message, prefix=""):
     """
     Broadcasts message to all connected clients.
     """
-
     for _socket in clients:
         _socket.send(bytes(prefix, "utf8") + message)
 
